@@ -1,0 +1,59 @@
+# ---------------------------------------------------------------
+# Image data and datasets -- never commit these.
+# ---------------------------------------------------------------
+
+# captured campus frames (~3.0 GB, lives on the Linux machine)
+dataset/
+# generated contact sheets / review crops / label overlays
+contact_sheets/
+review_sample/
+label_view/
+# any loose image anywhere in the tree
+*.jpg
+*.jpeg
+
+# ---------------------------------------------------------------
+# Annotations -- the labelling work product, kept local.
+# ---------------------------------------------------------------
+
+# YOLO-format .txt labels rebuilt from the Label Studio exports
+labels/
+# Label Studio project exports (the only irreplaceable artifact -- back these up)
+exports/
+# generated Label Studio task JSON
+labelstudio/
+
+# ---------------------------------------------------------------
+# Model weights, datasets built for training, and run output
+# ---------------------------------------------------------------
+*.pt
+*.pth
+*.onnx
+*.engine
+checkpoints/
+# ultralytics dataset layouts built by the dataset builder (symlinks + derived labels)
+yolo_ft*/
+# ultralytics run output (weights, results.csv, plots)
+runs/
+
+# ---------------------------------------------------------------
+# Environments / Python
+# ---------------------------------------------------------------
+.venv/
+venv/
+env/
+ls/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.ipynb_checkpoints/
+.pytest_cache/
+
+# ---------------------------------------------------------------
+# OS / editor
+# ---------------------------------------------------------------
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/
