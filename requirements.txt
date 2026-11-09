@@ -1,0 +1,10 @@
+# The detector. Pulls torch, torchvision, numpy, opencv and pillow with it.
+#
+# For a CUDA build, install torch and torchvision from the matching PyTorch
+# index FIRST so ultralytics does not pull a CPU-only wheel over them, e.g.
+#     pip install torch torchvision --index-url https://download.pytorch.org/whl/cu130
+ultralytics==8.4.208
+
+# src/inventory.py, src/merge.py and src/yolo_dataset.py need nothing at all.
+# They are standard library only, on purpose: the inventory has to run on
+# whatever Python the data machine already has.

@@ -47,7 +47,7 @@ because a decision written down is one that stops being re-litigated.
 | 1 | ADRs 0001 to 0003 | the record of what was tried and what was accepted | Windows |
 | 2 | ADRs 0004 to 0005, README | the dataset record, this document, the front page | Windows |
 | 3 | inventory | read-only report on what is actually on the Linux machine | written on Windows, run on Linux |
-| 4 | data pipeline | label merge, dataset builder, person only | both |
+| 4 | data pipeline and trainer | label merge, dataset builder, fine-tune script | both |
 | 5 | empty-frame experiment | evidence for or against the 1,556 excluded frames | Linux |
 | 6 | attribution report | per-export consistency, clearing or flagging the val set | Linux |
 | 7 | sweep | model size by input size, mAP and latency, feeding ADR 0006 | Linux |
@@ -64,7 +64,14 @@ One exception, from [ADR 0004](0004-dataset-and-labelling.md) decision 4. The
 merge step's split rule fails silently if it is reimplemented slightly
 differently, and a silently wrong split invalidates every number in this
 repository without raising an error. Its acceptance test is a diff of its output
-against the committed `split.csv`, not a clean exit.
+against the committed reference, not a clean exit:
+
+```bash
+python src/merge.py --check history/split_reference.csv
+```
+
+The trainer belongs to this slice rather than a later one, because slice 5 is an
+experiment and has nothing to run without it.
 
 Anything dropped during a port is recorded in
 [`history/dropped.md`](../history/dropped.md) in the slice that drops it, one

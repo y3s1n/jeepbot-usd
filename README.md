@@ -90,6 +90,56 @@ logs, and the output of the frame review. Nothing reads it and nothing should
 update it. It has its own [README](history/README.md), including one known
 defect in the inherited plots.
 
+## Pipeline
+
+```bash
+python src/merge.py --check history/split_reference.csv   # exports/ -> labels/ + split.csv
+python src/yolo_dataset.py                                # -> yolo_ft/ for ultralytics
+python src/train_yolo.py                                  # fine-tune, then validate
+```
+
+| script | what it does |
+|---|---|
+| `inventory.py` | read-only report on what is on the data machine. Writes nothing |
+| `merge.py` | Label Studio exports to `labels/` and `split.csv`, rebuilt from scratch |
+| `yolo_dataset.py` | `split.csv` and `labels/` to the layout ultralytics expects, person only |
+| `train_yolo.py` | fine-tune, re-validate `best.pt`, print mAP and per-image latency |
+
+**Always pass `--check` to `merge.py`.** It diffs the `split.csv` it just wrote
+against `history/split_reference.csv` and exits non-zero on any difference. The
+split rule is the one thing in this repository that can break without raising an
+error, and a wrong split silently invalidates every number here. See
+[ADR 0004](docs/0004-dataset-and-labelling.md) decision 4.
+
+Three of the four scripts have a `--selftest` that needs no data:
+
+```bash
+python src/inventory.py --selftest
+python src/yolo_dataset.py --selftest
+```
+
+### The experiment that is not settled
+
+Whether the 1,556 `empty_*` frames help has never been tested on the YOLO path.
+`--val-prefix` exists for exactly this: train on both sets of folders while
+validating on the person-only rows, so only the training data changes and the
+result stays comparable to 0.716.
+
+```bash
+python src/yolo_dataset.py --prefix person --out yolo_p
+python src/yolo_dataset.py --prefix person empty --val-prefix person --out yolo_pe
+python src/train_yolo.py --data yolo_p/data.yaml  --name person_only
+python src/train_yolo.py --data yolo_pe/data.yaml --name person_plus_empty
+```
+
+Deleting those frames cannot change 0.716, because they are already absent from
+it. The untested question is whether including them raises recall.
+
 ## Setup
 
-Nothing to install yet. Dependencies arrive with the code in slice 4.
+```bash
+pip install -r requirements.txt
+```
+
+Only `train_yolo.py` needs it. The other three scripts are standard library
+only, so the inventory runs on whatever Python the data machine already has.

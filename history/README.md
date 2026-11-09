@@ -1,7 +1,7 @@
 # history
 
 Evidence for the decisions in [`../docs/`](../docs/). Nothing here is read by
-any script in this repository, and nothing here should be updated — these are
+any script in this repository, and nothing here should be updated. These are
 the measurements as they were taken, kept so that an ADR's numbers can be
 checked rather than taken on trust.
 
@@ -32,7 +32,7 @@ those two are directly comparable. The others are not comparable to each other.
 byte-identical (`best_allclasses`, `best_person`, `person_only_person`, all
 md5 `1ccf2ca3...`). The generator plotted a fixed log file rather than the one
 belonging to the checkpoint it was scoring, so two of those three show the
-wrong run's curve. The `summary.csv` numbers are unaffected — they were
+wrong run's curve. The `summary.csv` numbers are unaffected, because they were
 computed from the checkpoint, not from a log. For per-epoch cost use
 `train_logs/` instead, which is correct and per-run.
 
@@ -56,3 +56,4 @@ terms, plus wall-clock seconds.
 | `review_decisions.csv` | the 620 decisions from the manual frame review: 323 keep, 270 move, 27 reject |
 | `split_public.csv` | the COCO-2017 subset rows, all train. The COCO path is abandoned |
 | `stats.json` | per-channel mean/std of the training images, used only by the from-scratch normalization |
+| `split_reference.csv` | the 2,780 row `split.csv` as the predecessor produced it. `src/merge.py --check` diffs its output against this, per ADR 0004 decision 4. The only file here that code reads |
